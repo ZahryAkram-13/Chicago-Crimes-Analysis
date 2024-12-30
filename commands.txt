@@ -1,0 +1,20 @@
+
+
+sbt clean package compile assembly
+
+gsutil cp target/scala-2.13/project_jars.jar gs://dataproc-staging-us-east1-124100932800-zukothwe/jars/
+gcloud config set project big-data-444917
+gcloud storage buckets list
+gcloud projects list
+gcloud storage buckets list --project big-data-444917
+
+gcloud dataproc jobs submit spark --cluster=cluster1 --region=us-east1 --class=commun_type_by_district.commun_type_by_district --jars=gs://dataproc-staging-us-east1-124100932800-zukothwe/jars/project_jars.jar--properties=spark.executor.memory=2g,spark.driver.memory=2g --async
+
+
+
+lancer les jobs:
+gcloud dataproc jobs submit spark --cluster=cluster1 --region=us-east1 --class=transform_columns.transform_columns --jars=gs://dataproc-staging-us-east1-124100932800-zukothwe/jars/project_jars.jar
+gcloud dataproc jobs submit spark --cluster=cluster1 --region=us-east1 --class=crimes_rate_by_area.crimes_rate_by_area --jars=gs://dataproc-staging-us-east1-124100932800-zukothwe/jars/project_jars.jar
+gcloud dataproc jobs submit spark --cluster=cluster1 --region=us-east1 --class=kidnappin_robbery_hotspots.kidnappin_robbery_hotspots --jars=gs://dataproc-staging-us-east1-124100932800-zukothwe/jars/project_jars.jar
+gcloud dataproc jobs submit spark --cluster=cluster1 --region=us-east1 --class=most_criminal_hour.most_criminal_hour --jars=gs://dataproc-staging-us-east1-124100932800-zukothwe/jars/project_jars.jar
+
