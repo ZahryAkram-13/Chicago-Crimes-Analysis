@@ -25,13 +25,13 @@ object commun_type_by_district {
                     .option("inferSchema", "true")
                     .csv(data_file) 
     
-    val crime_by_district = data.groupBy("District", "Primary Type")
+    val crime_by_district = data.groupBy("District", "Primary_Type")
                                 .agg(count("*").alias("crime_count"))
                                 .orderBy("District", "crime_count")               
 
     crime_by_district.show(truncate = false)
 
-    val output_folder = s"${output_path}/commun_type_by_district"
+    val output_folder = Util.get_output_folder("commun_type_by_district")
     crime_by_district.write.option("header", "true").mode("overwrite").csv(output_folder) 
 
 

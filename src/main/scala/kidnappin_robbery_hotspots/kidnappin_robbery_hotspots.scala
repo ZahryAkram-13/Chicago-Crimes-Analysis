@@ -17,9 +17,9 @@ object kidnappin_robbery_hotspots{
 
         val data = Util.get_transformed_data(spark)
 
-        val Primary_type_column = "Primary Type"
+        val Primary_type_column = "Primary_Type"
         val location_column = "Location"
-        val location_description_column = "Location Description"
+        val location_description_column = "Location_Description"
 
         val filtred_data = data
         .filter(col(Primary_type_column).isin("KIDNAPPING", "ROBBERY"))
@@ -33,7 +33,8 @@ object kidnappin_robbery_hotspots{
         Util.print_value("value", Primary_type_column)
         grouped.limit(30).show(truncate = false)
 
-        Util.save_data(grouped, "kidnappin_robbery_hotspots")
+        val output_folder = Util.get_output_folder("kidnappin_robbery_hotspots")
+        Util.save_data(grouped, output_folder)
 
         spark.stop()
 

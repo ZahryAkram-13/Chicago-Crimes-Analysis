@@ -18,8 +18,8 @@ object crimes_rate_by_area{
 
         val data = Util.get_transformed_data(spark)
 
-        val area_arrests_columns = Seq("Community Area", "Arrest")
-        val area_stat = data.groupBy("Community Area")
+        val area_arrests_columns = Seq("Community_Area", "Arrest")
+        val area_stat = data.groupBy("Community_Area")
         .agg(
             count("*").as("total_crimes"),
             sum(when(col("Arrest") === "true", 1).otherwise(0)).as("total_arrests")

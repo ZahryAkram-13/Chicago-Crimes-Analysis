@@ -1,3 +1,16 @@
+file://<WORKSPACE>/transform_columns/transform_columns.scala
+### java.lang.IndexOutOfBoundsException: -1
+
+occurred in the presentation compiler.
+
+presentation compiler configuration:
+
+
+action parameters:
+offset: 3435
+uri: file://<WORKSPACE>/transform_columns/transform_columns.scala
+text:
+```scala
 package transform_columns
 
 import org.apache.spark.sql.{DataFrame}
@@ -104,6 +117,9 @@ object transform_columns{
 
         **/    
 
+        val renamed = new_data.columns.foldLeft(new_data){
+            (tmp_df, col_name) => tmp_df.withColumnRenamed(col_name, @@)
+        }
         
 
         new_data.select(community_area).limit(20).show()
@@ -113,41 +129,31 @@ object transform_columns{
 
         new_data.select("Location Description").limit(20).show()
 
-        val renamed = new_data.columns.foldLeft(new_data){
-            (tmp_df, col_name) => tmp_df.withColumnRenamed(col_name, col_name.replace(" ", "_"))
-        }
-
-        renamed.printSchema()
 
         
 
         val transformed_data_file = s"${Util.data_path}/transformed_data"
-        Util.save_data(renamed, transformed_data_file)
+        Util.save_data(new_data, transformed_data_file)
 
         spark.stop()
     }
 }
+```
 
 
-/**
 
- root
- |-- Date: string (nullable = true)
- |-- IUCR: string (nullable = true)
- |-- Primary_Type: string (nullable = true)
- |-- Description: string (nullable = true)
- |-- Location_Description: string (nullable = true)
- |-- Arrest: boolean (nullable = true)
- |-- Domestic: boolean (nullable = true)
- |-- Beat: integer (nullable = true)
- |-- District: integer (nullable = true)
- |-- Community_Area: string (nullable = true)
- |-- X_Coordinate: integer (nullable = true)
- |-- Y_Coordinate: integer (nullable = true)
- |-- Year: integer (nullable = true)
- |-- Latitude: double (nullable = true)
- |-- Longitude: double (nullable = true)
- |-- Location: string (nullable = true)
- |-- Time: string (nullable = true)
- |-- AM_PM: string (nullable = true) 
-**/
+#### Error stacktrace:
+
+```
+scala.collection.LinearSeqOps.apply(LinearSeq.scala:129)
+	scala.collection.LinearSeqOps.apply$(LinearSeq.scala:128)
+	scala.collection.immutable.List.apply(List.scala:79)
+	dotty.tools.dotc.util.Signatures$.applyCallInfo(Signatures.scala:244)
+	dotty.tools.dotc.util.Signatures$.computeSignatureHelp(Signatures.scala:101)
+	dotty.tools.dotc.util.Signatures$.signatureHelp(Signatures.scala:88)
+	dotty.tools.pc.SignatureHelpProvider$.signatureHelp(SignatureHelpProvider.scala:47)
+	dotty.tools.pc.ScalaPresentationCompiler.signatureHelp$$anonfun$1(ScalaPresentationCompiler.scala:439)
+```
+#### Short summary: 
+
+java.lang.IndexOutOfBoundsException: -1

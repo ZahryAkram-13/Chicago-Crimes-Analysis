@@ -7,7 +7,7 @@ import commun.Util
 
 /**
  * This object analyzes the crime data to identify the hour of the day with the highest crime rates.
- * It processes the time and AM/PM columns to convert them into a 24-hour format and then groups the data
+ * It processes the time and AM_PM columns to convert them into a 24-hour format and then groups the data
  * by the hour. It aggregates the count of crimes for each hour and displays the top 10 hours with the 
  * highest crime counts.
  * 
@@ -21,7 +21,7 @@ object most_criminal_hour{
         val data: DataFrame = Util.get_transformed_data(spark)
 
         val time_column: String = "Time"
-        val midday_column: String = "AM/PM"
+        val midday_column: String = "AM_PM"
 
         val data_with_hour = data.withColumn(
             "hour_exact",
@@ -49,7 +49,8 @@ object most_criminal_hour{
 
         crime_by_hour.limit(10).show()
 
-        Util.save_data(crime_by_hour, "most_criminal_hour")
+        val output_folder = Util.get_output_folder("most_criminal_hour")
+        Util.save_data(crime_by_hour, output_folder)
 
 
         spark.stop()
